@@ -20,8 +20,9 @@ for comFile in listdir('./'):
         if search('(B( \d+){2} F)',fileLines[i]):
             for j in range(int(nCopies)):
                 dist = lowerDistance+unitDist*j
-                txtDist = sub('\.','',f'{dist:.2f}')
-                fileLines[i] = sub('(B( \d+){2})( \d+\.\d+)? F.*',r'\1 '+f'{dist:.2f} F',fileLines[i])
+                txtDist = f'{int(100*dist)}'
+                ithLine = fileLines[i]
+                fileLines.insert(i, f'{ithLine[:-2]}{dist:.2f}\n')
                 fileContent = ''.join(fileLines)
                 with open(f'{comDir}/{comFile[:-4]}-{txtDist}.com','w') as fileToWrite:
                     fileToWrite.write(fileContent)
