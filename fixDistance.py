@@ -8,23 +8,25 @@ from os.path import isdir
 nCopies = 10
 lowerDistance = 1.80
 upperDistance = 2.20
+path = './'
 
 unitDist = abs(upperDistance-lowerDistance)/nCopies
-for comFile in listdir('./'):
+for comFile in listdir(path):
     if not comFile.endswith('.com'): continue
     comDir = comFile[:-4]
-    if isdir(f'{comDir}/'): system(f'rm -r {comDir}/')
+    if isdir(f'{path}{comDir}/'): system(f'rm -r {path}{comDir}/')
     mkdir(comDir)
-    with open(comFile,'r') as file: fileLines = file.readlines()
+    with open(path+comFile,'r') as file: fileLines = file.readlines()
     for i in range(len(fileLines)-1,0,-1):
         if search('(B( \d+){2} F)',fileLines[i]):
+            ithLine = fileLines[i]
             for j in range(int(nCopies)):
+                tmpFileLines = fileLines.copy()
                 dist = lowerDistance+unitDist*j
                 txtDist = f'{int(100*dist)}'
-                ithLine = fileLines[i]
-                fileLines.insert(i, f'{ithLine[:-2]}{dist:.2f}\n')
-                fileContent = ''.join(fileLines)
-                with open(f'{comDir}/{comFile[:-4]}-{txtDist}.com','w') as fileToWrite:
+                tmpFileLines.insert(i, f'{ithLine[:-2]}{dist:.2f}\n')
+                fileContent = ''.join(tmpFileLines)
+                with open(f'{path}{comDir}/{comFile[:-4]}-{txtDist}.com','w') as fileToWrite:
                     fileToWrite.write(fileContent)
             break
 
